@@ -1,1 +1,1 @@
-console.log(tets);
+console.log(test);
