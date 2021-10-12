@@ -65,3 +65,4 @@ const sum = (...params) => {
 const square = (a) => a*a;
 
 console.log(square(sum(2, 4, 3)));
+console.log(sum(3,4,5));
