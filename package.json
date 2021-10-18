@@ -1,0 +1,27 @@
+{
+  "name": "coforge_training",
+  "version": "0.0.1",
+  "description": "JS setup practice",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dipankarc24/coforge_training.git"
+  },
+  "keywords": [
+    "javascript"
+  ],
+  "author": "DC",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Dipankarc24/coforge_training/issues"
+  },
+  "homepage": "https://github.com/Dipankarc24/coforge_training#readme",
+  "devDependencies": {
+    "webpack": "^5.58.2",
+    "webpack-cli": "^4.9.0"
+  }
+}
