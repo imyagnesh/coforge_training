@@ -1,0 +1,1 @@
+(()=>{"use strict";(new class{display(){console.log("Hello")}}).display()})();
