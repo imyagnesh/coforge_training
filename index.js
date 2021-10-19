@@ -1,5 +1,14 @@
 // import { x as XX, y } from "./App";
-import Anim, { x as XX, y } from "./App";
+import Anim, { x as XX, y } from './App';
+
+const obj = {};
+
+const fn = greet => `Hello ${greet}`;
+console.log(fn('Yagnesh'));
+
+const foo = obj.foo ?? 'default';
+
+console.log(foo);
 
 const a = 1;
 
