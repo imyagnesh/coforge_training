@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Child1 from './Child1';
 import Child2 from './Child2';
+import ErrorBoundary from './ErrorBoundary';
 import './style.css';
 
 // React
@@ -63,7 +64,6 @@ class App extends Component {
   state = {
     a: 1,
     data: [],
-    hasError: false,
   };
 
   // Call only once
@@ -122,28 +122,12 @@ class App extends Component {
     console.log(snapshot);
   }
 
-  static getDerivedStateFromError(error) {
-    return {
-      hasError: true,
-    };
-  }
-
-  componentDidCatch(error, info) {
-    // Error Analytics
-    //  API call
-    //
-  }
-
   render() {
     console.log('render');
     const { name, designation } = this.props;
-    const { hasError } = this.state;
-    if (hasError) {
-      return <h1>Please try after some time</h1>;
-    }
 
     return (
-      <>
+      <ErrorBoundary>
         <h1 id="title">{name}</h1>
         <h1>{designation}</h1>
         <h2>{this.state.a}</h2>
@@ -155,7 +139,7 @@ class App extends Component {
         <button type="button" onClick={this.increment}>
           Increment
         </button>
-      </>
+      </ErrorBoundary>
     );
   }
 }

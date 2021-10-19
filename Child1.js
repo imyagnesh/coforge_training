@@ -1,14 +1,9 @@
 import React, { PureComponent } from 'react';
-import shallowCompare from 'react-addons-shallow-compare';
 
 export default class Child1 extends PureComponent {
   state = {
     i: 1,
   };
-
-  mouseMove() {
-    console.log('mouse moved');
-  }
 
   componentDidMount() {
     // document.addEventListener('mousemove', this.mouseMove);
@@ -31,16 +26,16 @@ export default class Child1 extends PureComponent {
 
   increment = () => {
     this.setState({
-      i: this.state.i + [],
+      i: this.state.i + 1,
     });
   };
 
   render() {
     console.log('Child 1');
     const { i } = this.state;
-    // if (i > 5) {
-    //   throw new Error('Error from child 1');
-    // }
+    if (i > 5) {
+      throw new Error('Error from child 1');
+    }
     return (
       <div>
         <h1>{i}</h1>
