@@ -1,7 +1,7 @@
 /**
  * Assignment based on reduce funtion
  */
-const users = [
+ const users = [
     {
         name: "Yagnesh",
         age: 33,
@@ -47,27 +47,6 @@ const users = [
 
 /**
  * Task 1
- * Group by function
- * Sort group item
- */
-const groupBy = users.reduce((p, c) => {
-    const genKey = Math.floor(c.age / 10);
-    const key = `${genKey}0-${genKey}9`;
-    if (!p[key]) {
-        p[key] = [];
-    }
-    p[key].push(c);
-    //Sort group list
-    p[key].sort((a, b) => a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1);
-    return p;
-}, {});
-
-console.log(groupBy);
-
-
-
-/**
- * Task 2
  * Group by function
  * Sort group item
  */
@@ -143,7 +122,7 @@ console.log(some)
 * Every function implementation
 */
 const every = users.reduce((p, c, index) => {
-    if (c.age > 10 && p) {
+    if (c.age > 5 && p) {
         p = true;;
     } else {
         p = false;
@@ -152,9 +131,3 @@ const every = users.reduce((p, c, index) => {
 }, true);
 
 console.log(every)
-
-
-
-
-
-
