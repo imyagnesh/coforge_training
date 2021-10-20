@@ -12,12 +12,13 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'import'],
   rules: {
     'react/jsx-filename-extension': [
       1,
-      { extensions: ['.js', '.jsx'] },
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
     ],
     'arrow-parens': 0,
+    'no-use-before-define': 0,
   },
 };
