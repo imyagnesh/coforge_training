@@ -1,1 +1,0 @@
-(()=>{"use strict";const l=new class{samplecall(){return!0}};console.log(1),console.log(x),console.log(1),console.log(2),console.log(l.samplecall())})();
