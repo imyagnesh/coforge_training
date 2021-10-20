@@ -8,13 +8,23 @@ import ITodo from '../types/ITodo';
 
 interface IProps {}
 
+// type FilterType = 'ALL' | 'Completed' | 'Pending';
+
+// enum FilterType {
+//   All = 'ALL',
+//   Pending = 'PENDING',
+//   Completed = 'COMPLETED',
+// }
+
 interface IState {
   todoList: ITodo[];
+  filterType: string;
 }
 
 class Todo extends Component<IProps, IState> {
   state = {
     todoList: [],
+    filterType: 'all',
   };
 
   todoTextRef = createRef<HTMLInputElement>();
@@ -85,9 +95,15 @@ class Todo extends Component<IProps, IState> {
     // }));
   };
 
+  filterTodo = (type: string) => {
+    this.setState({
+      filterType: type,
+    });
+  };
+
   render() {
     console.log('render');
-    const { todoList } = this.state;
+    const { todoList, filterType } = this.state;
 
     return (
       <div className="container">
@@ -97,37 +113,63 @@ class Todo extends Component<IProps, IState> {
           <button type="submit">Add Todo</button>
         </form>
         <div className="list">
-          {todoList.map((item: ITodo) => (
-            <div className="list-item" key={item.id}>
-              <input
-                type="checkbox"
-                name="isDone"
-                id="isDone"
-                checked={item.isDone}
-                onChange={() => this.completeTodo(item)}
-              />
-              <span
-                style={{
-                  textDecoration: item.isDone
-                    ? 'line-through'
-                    : 'none',
-                }}
-              >
-                {item.text}
-              </span>
-              <button
-                type="button"
-                onClick={() => this.deleteTodo(item.id)}
-              >
-                Delete
-              </button>
-            </div>
-          ))}
+          {todoList
+            .filter((x: ITodo) => {
+              switch (filterType) {
+                case 'completed':
+                  return x.isDone;
+                case 'pending':
+                  return !x.isDone;
+                default:
+                  return true;
+              }
+            })
+            .map((item: ITodo) => (
+              <div className="list-item" key={item.id}>
+                <input
+                  type="checkbox"
+                  name="isDone"
+                  id="isDone"
+                  checked={item.isDone}
+                  onChange={() => this.completeTodo(item)}
+                />
+                <span
+                  style={{
+                    textDecoration: item.isDone
+                      ? 'line-through'
+                      : 'none',
+                  }}
+                >
+                  {item.text}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => this.deleteTodo(item.id)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
         </div>
         <div className="filter-wrapper">
-          <button type="button">All</button>
-          <button type="button">Pending</button>
-          <button type="button">Completed</button>
+          <button
+            type="button"
+            onClick={() => this.filterTodo('all')}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            onClick={() => this.filterTodo('pending')}
+          >
+            Pending
+          </button>
+          <button
+            type="button"
+            onClick={() => this.filterTodo('completed')}
+          >
+            Completed
+          </button>
         </div>
       </div>
     );
