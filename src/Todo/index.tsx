@@ -29,7 +29,11 @@ class Todo extends Component<IProps, IState> {
         ({ todoList }) => ({
           todoList: [
             ...todoList,
-            { id: new Date().valueOf(), text: todoText },
+            {
+              id: new Date().valueOf(),
+              text: todoText,
+              isDone: false,
+            },
           ],
         }),
         () => {
@@ -58,6 +62,29 @@ class Todo extends Component<IProps, IState> {
     }));
   };
 
+  completeTodo = (item: ITodo) => {
+    const { todoList } = this.state;
+    const index: number = todoList.findIndex(
+      (x: ITodo) => x.id === item.id,
+    );
+    const updatedTodoList: ITodo[] = [
+      ...todoList.slice(0, index),
+      {
+        ...item,
+        isDone: !item.isDone,
+      },
+      ...todoList.slice(index + 1),
+    ];
+    this.setState({
+      todoList: updatedTodoList,
+    });
+    // this.setState(({ todoList }) => ({
+    //   todoList: todoList.map(x =>
+    //     x.id === item.id ? { ...x, isDone: !x.isDone } : x,
+    //   ),
+    // }));
+  };
+
   render() {
     console.log('render');
     const { todoList } = this.state;
@@ -76,8 +103,18 @@ class Todo extends Component<IProps, IState> {
                 type="checkbox"
                 name="isDone"
                 id="isDone"
+                checked={item.isDone}
+                onChange={() => this.completeTodo(item)}
               />
-              <span>{item.text}</span>
+              <span
+                style={{
+                  textDecoration: item.isDone
+                    ? 'line-through'
+                    : 'none',
+                }}
+              >
+                {item.text}
+              </span>
               <button
                 type="button"
                 onClick={() => this.deleteTodo(item.id)}
