@@ -1,14 +1,34 @@
 {
-  "todoList": [
+  "weatherList": [
     {
-      "text": "Learn React",
-      "isDone": true,
+      "name": "New Delhi",
+      "temparature": 22,
       "id": 1
     },
     {
-      "text": "Get milk",
-      "isDone": false,
+      "name": "Chennai",
+      "temparature": 26,
       "id": 2
+    },
+    {
+      "name": "Banglore",
+      "temparature": 18,
+      "id": 3
+    },
+    {
+      "name": "Patna",
+      "temparature": 27,
+      "id": 4
+    },
+    {
+      "name": "Lucknow",
+      "temparature": 23,
+      "id": 5
+    },
+    {
+      "name": "Noida",
+      "temparature": 24,
+      "id": 5
     }
   ]
 }
