@@ -11,6 +11,7 @@ import TodoList from './TodoList';
 import TodoFilter from './TodoFilter';
 import ITodo from '../types/ITodo';
 import { IFilterType } from '../types/IFilterType';
+import client from '../utils/axiosInstance';
 
 interface Props {}
 
@@ -21,18 +22,31 @@ const Todo = (params: Props) => {
   );
   const todoTextRef = useRef<HTMLInputElement>();
 
-  const loadData = useCallback(async () => {
-    try {
-      const res = await fetch(
-        'http://localhost:3000/todoList',
-      );
-      const list = await res.json();
-      setTodoList(list);
-    } catch (error) {}
-  }, []);
+  const loadData = useCallback(
+    async (type: IFilterType) => {
+      try {
+        let params = {};
+        if (
+          type === IFilterType.Completed ||
+          type === IFilterType.Pending
+        ) {
+          params = {
+            isDone: type === IFilterType.Completed,
+          };
+        }
+        const res = await client.get<ITodo[]>('todoList', {
+          params,
+        });
+        setTodoList(res.data);
+      } catch (error: Error) {
+        console.log(error.message);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
-    loadData();
+    loadData(IFilterType.ALL);
   }, [loadData]);
 
   const addTodo = useCallback(
@@ -42,24 +56,11 @@ const Todo = (params: Props) => {
       const todoText = todoTextRef.current?.value;
 
       if (todoText) {
-        const res = await fetch(
-          'http://localhost:3000/todoList',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              text: todoText,
-              isDone: false,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-            },
-          },
-        );
-
-        const newTodo = await res.json();
-
-        setTodoList(x => [...x, newTodo]);
+        const res = await client.post<ITodo>('todoList', {
+          text: todoText,
+          isDone: false,
+        });
+        setTodoList(x => [...x, res.data]);
         if (todoTextRef.current) {
           todoTextRef.current.value = '';
         }
@@ -68,7 +69,8 @@ const Todo = (params: Props) => {
     [],
   );
 
-  const deleteTodo = useCallback((id: number) => {
+  const deleteTodo = useCallback(async (id: number) => {
+    await client.delete(`todoList/${id}`);
     // const index: number = todoList.findIndex(
     //   (x: ITodo) => x.id === id,
     // );
@@ -80,7 +82,7 @@ const Todo = (params: Props) => {
     setTodoList(list => list.filter(x => x.id !== id));
   }, []);
 
-  const completeTodo = useCallback((item: ITodo) => {
+  const completeTodo = useCallback(async (item: ITodo) => {
     // const index: number = todoList.findIndex(
     //   (x: ITodo) => x.id === item.id,
     // );
@@ -93,16 +95,22 @@ const Todo = (params: Props) => {
     //   ...todoList.slice(index + 1),
     // ];
     // setTodoList(updatedTodoList);
+    const res = await client.put<ITodo>(
+      `todoList/${item.id}`,
+      {
+        ...item,
+        isDone: !item.isDone,
+      },
+    );
+
     setTodoList(list =>
-      list.map(x =>
-        x.id === item.id ? { ...x, isDone: !x.isDone } : x,
-      ),
+      list.map(x => (x.id === item.id ? res.data : x)),
     );
   }, []);
 
-  const filterTodo = useCallback((type: IFilterType) => {
-    setFilterType(type);
-  }, []);
+  // const filterTodo = useCallback((type: IFilterType) => {
+  //   setFilterType(type);
+  // }, []);
 
   return (
     <div className="container">
@@ -113,11 +121,10 @@ const Todo = (params: Props) => {
       />
       <TodoList
         todoList={todoList}
-        filterType={filterType}
         deleteTodo={deleteTodo}
         completeTodo={completeTodo}
       />
-      <TodoFilter filterTodo={filterTodo} />
+      <TodoFilter filterTodo={loadData} />
     </div>
   );
 };
