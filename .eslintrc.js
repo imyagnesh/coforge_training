@@ -20,5 +20,8 @@ module.exports = {
     ],
     'arrow-parens': 0,
     'no-use-before-define': 0,
+    'no-confusing-arrow': 0,
+    'implicit-arrow-linebreak': 0,
+    'function-paren-newline': 0,
   },
 };
