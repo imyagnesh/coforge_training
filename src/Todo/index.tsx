@@ -10,7 +10,12 @@ import TodoForm from './TodoForm';
 import TodoList from './TodoList';
 import TodoFilter from './TodoFilter';
 import ITodo from '../types/ITodo';
-import { IFilterType } from '../types/IFilterType';
+import {
+  IFilterType,
+  Request,
+  RequestStatus,
+  RequestTypes,
+} from '../types/IFilterType';
 import client from '../utils/axiosInstance';
 
 interface Props {}
@@ -20,11 +25,61 @@ const Todo = (params: Props) => {
   const [filterType, setFilterType] = useState<IFilterType>(
     IFilterType.ALL,
   );
+  const [requestStatus, setRequestStatus] = useState<
+    Request[]
+  >([]);
+
   const todoTextRef = useRef<HTMLInputElement>();
+
+  console.log(requestStatus);
+
+  const changeStatus = (
+    type: RequestTypes,
+    status: RequestStatus,
+  ) => {
+    if (status === RequestStatus.REQUEST) {
+      setRequestStatus(data => {
+        const isStatusExist = data.some(
+          x => x.status === status && x.type === type,
+        );
+        if (!isStatusExist) {
+          return [
+            ...data,
+            {
+              status,
+              type,
+            },
+          ];
+        }
+        return data;
+      });
+    }
+    if (status === RequestStatus.FAIL) {
+      setRequestStatus(data =>
+        data.map(x =>
+          x.type === type
+            ? { ...x, status: RequestStatus.FAIL }
+            : x,
+        ),
+      );
+    }
+    if (status === RequestStatus.COMPLETED) {
+      setRequestStatus(data =>
+        data.filter(
+          x => x.status !== status && x.type !== type,
+        ),
+      );
+    }
+  };
 
   const loadData = useCallback(
     async (type: IFilterType) => {
       try {
+        changeStatus(
+          RequestTypes.LOAD_DATA,
+          RequestStatus.REQUEST,
+        );
+
         let params = {};
         if (
           type === IFilterType.Completed ||
@@ -38,8 +93,15 @@ const Todo = (params: Props) => {
           params,
         });
         setTodoList(res.data);
+        changeStatus(
+          RequestTypes.LOAD_DATA,
+          RequestStatus.COMPLETED,
+        );
       } catch (error: Error) {
-        console.log(error.message);
+        changeStatus(
+          RequestTypes.LOAD_DATA,
+          RequestStatus.FAIL,
+        );
       }
     },
     [],
@@ -51,66 +113,109 @@ const Todo = (params: Props) => {
 
   const addTodo = useCallback(
     async (event: FormEvent): void => {
-      event.preventDefault();
-      // O(1)
-      const todoText = todoTextRef.current?.value;
+      try {
+        event.preventDefault();
+        changeStatus(
+          RequestTypes.ADD_DATA,
+          RequestStatus.REQUEST,
+        );
+        // O(1)
+        const todoText = todoTextRef.current?.value;
 
-      if (todoText) {
-        const res = await client.post<ITodo>('todoList', {
-          text: todoText,
-          isDone: false,
-        });
-        setTodoList(x => [...x, res.data]);
-        if (todoTextRef.current) {
-          todoTextRef.current.value = '';
+        if (todoText) {
+          const res = await client.post<ITodo>('todoList', {
+            text: todoText,
+            isDone: false,
+          });
+          setTodoList(x => [...x, res.data]);
+          if (todoTextRef.current) {
+            todoTextRef.current.value = '';
+          }
+          changeStatus(
+            RequestTypes.ADD_DATA,
+            RequestStatus.COMPLETED,
+          );
         }
+      } catch (error: Error) {
+        changeStatus(
+          RequestTypes.ADD_DATA,
+          RequestStatus.FAIL,
+        );
       }
     },
     [],
   );
 
   const deleteTodo = useCallback(async (id: number) => {
-    await client.delete(`todoList/${id}`);
-    // const index: number = todoList.findIndex(
-    //   (x: ITodo) => x.id === id,
-    // );
-    // const updatedTodoList: ITodo[] = [
-    //   ...todoList.slice(0, index),
-    //   ...todoList.slice(index + 1),
-    // ];
-    // setTodoList(updatedTodoList);
-    setTodoList(list => list.filter(x => x.id !== id));
+    try {
+      await client.delete(`todoList/${id}`);
+      // const index: number = todoList.findIndex(
+      //   (x: ITodo) => x.id === id,
+      // );
+      // const updatedTodoList: ITodo[] = [
+      //   ...todoList.slice(0, index),
+      //   ...todoList.slice(index + 1),
+      // ];
+      // setTodoList(updatedTodoList);
+      setTodoList(list => list.filter(x => x.id !== id));
+    } catch (error: Error) {
+    } finally {
+    }
   }, []);
 
   const completeTodo = useCallback(async (item: ITodo) => {
-    // const index: number = todoList.findIndex(
-    //   (x: ITodo) => x.id === item.id,
-    // );
-    // const updatedTodoList: ITodo[] = [
-    //   ...todoList.slice(0, index),
-    //   {
-    //     ...item,
-    //     isDone: !item.isDone,
-    //   },
-    //   ...todoList.slice(index + 1),
-    // ];
-    // setTodoList(updatedTodoList);
-    const res = await client.put<ITodo>(
-      `todoList/${item.id}`,
-      {
-        ...item,
-        isDone: !item.isDone,
-      },
-    );
+    try {
+      // const index: number = todoList.findIndex(
+      //   (x: ITodo) => x.id === item.id,
+      // );
+      // const updatedTodoList: ITodo[] = [
+      //   ...todoList.slice(0, index),
+      //   {
+      //     ...item,
+      //     isDone: !item.isDone,
+      //   },
+      //   ...todoList.slice(index + 1),
+      // ];
+      // setTodoList(updatedTodoList);
 
-    setTodoList(list =>
-      list.map(x => (x.id === item.id ? res.data : x)),
-    );
+      const res = await client.put<ITodo>(
+        `todoList/${item.id}`,
+        {
+          ...item,
+          isDone: !item.isDone,
+        },
+      );
+
+      setTodoList(list =>
+        list.map(x => (x.id === item.id ? res.data : x)),
+      );
+    } catch (error: Error) {
+    } finally {
+    }
   }, []);
 
   // const filterTodo = useCallback((type: IFilterType) => {
   //   setFilterType(type);
   // }, []);
+  if (
+    requestStatus.some(
+      x =>
+        x.type === RequestTypes.LOAD_DATA &&
+        x.status === RequestStatus.REQUEST,
+    )
+  ) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (
+    requestStatus.some(
+      x =>
+        x.type === RequestTypes.LOAD_DATA &&
+        x.status === RequestStatus.FAIL,
+    )
+  ) {
+    return <h1>Please Try After sometime</h1>;
+  }
 
   return (
     <div className="container">
@@ -123,6 +228,7 @@ const Todo = (params: Props) => {
         todoList={todoList}
         deleteTodo={deleteTodo}
         completeTodo={completeTodo}
+        status={requestStatus}
       />
       <TodoFilter filterTodo={loadData} />
     </div>

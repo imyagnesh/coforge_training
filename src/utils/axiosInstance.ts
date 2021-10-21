@@ -5,7 +5,7 @@ import axios, {
 
 const config: AxiosRequestConfig = {
   baseURL: 'http://localhost:3000',
-  timeout: 100,
+  timeout: 3000,
   timeoutErrorMessage:
     'Server is down. Please try after sometime',
 };

@@ -1,5 +1,9 @@
 import React, { memo } from 'react';
-import { IFilterType } from '../types/IFilterType';
+import {
+  IFilterType,
+  RequestStatus,
+  RequestTypes,
+} from '../types/IFilterType';
 import ITodo from '../types/ITodo';
 
 interface Props {
@@ -12,6 +16,7 @@ const TodoList = ({
   todoList,
   completeTodo,
   deleteTodo,
+  status,
 }: Props) => {
   console.log('TodoList');
   return (
@@ -42,6 +47,16 @@ const TodoList = ({
           </button>
         </div>
       ))}
+      {status.some(
+        x =>
+          x.type === RequestTypes.ADD_DATA &&
+          x.status === RequestStatus.REQUEST,
+      ) && <h3>Loading....</h3>}
+      {status.some(
+        x =>
+          x.type === RequestTypes.ADD_DATA &&
+          x.status === RequestStatus.FAIL,
+      ) && <h1>Please Try After sometime</h1>}
     </div>
   );
 };
