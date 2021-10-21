@@ -22,6 +22,16 @@ marks:430
     Name:'Anil',
     age:29,
     marks:380
+},
+             {
+    Name:'Arti',
+    age:19,
+    marks:280
+},
+             {
+    Name:'Shanoo',
+    age:49,
+    marks:300
 }
 ];
 //**************************************** */Task 1 Sum Method
