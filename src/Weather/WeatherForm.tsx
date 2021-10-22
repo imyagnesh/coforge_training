@@ -13,7 +13,7 @@ const WeatherForm = ({ cityList, getWeather, weatherTextRef }: Props) => {
   console.log('WeatherForm');
   return (
     <form onSubmit={getWeather}>
-      <select>
+      <select ref={weatherTextRef}>
           <option value="">Please selecte</option>
           {
              cityList.map((city, i) => {
