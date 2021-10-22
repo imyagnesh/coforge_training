@@ -30,12 +30,12 @@ import React, {
             );
             const list = await res.json();
             if (cityId > 0) {
-                setTodoList(list[0]);
+              setweatherDetail(list[0]);
             }
             else {
 
             }
-            setTodoList(list
+            setCityList(list);
       } catch (error) {}
     }, []);
   
