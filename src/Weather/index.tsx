@@ -33,9 +33,9 @@ import React, {
               setweatherDetail(list[0]);
             }
             else {
-
+              setCityList(list);
             }
-            setCityList(list);
+            
       } catch (error) {}
     }, []);
   
