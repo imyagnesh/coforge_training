@@ -1,0 +1,60 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.list {
+  width: 100%;
+  flex: 1;
+}
+
+.list > .list-item {
+  display: flex;
+  margin: 10px;
+  align-items: center;
+}
+
+.list > .list-item > span {
+  flex-grow: 1;
+  padding: 0 10px;
+}
+.list > .list-item > button {
+  width: 60px;
+}
+
+.filter-wrapper {
+  width: 100%;
+  display: flex;
+}
+
+.filter-wrapper > button {
+  flex-grow: 1;
+}
+
+/* .box-wrapper {
+  height: 800px;
+  width: 100%;
+  background-color: aqua;
+  display: flex;
+  flex-direction: row;
+}
+
+.box {
+  height: 100px;
+  width: 100px;
+}
+.box:nth-child(1) {
+  flex: 1;
+  background-color: dodgerblue;
+}
+.box:nth-child(2) {
+  flex: 1;
+  align-self: flex-end;
+  background-color: bisque;
+}
+.box:nth-child(3) {
+  flex: 1;
+  background-color: darkgoldenrod;
+} */

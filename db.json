@@ -1,0 +1,34 @@
+{
+  "todoList": [
+    {
+      "text": "Learn React",
+      "isDone": false,
+      "id": 1
+    },
+    {
+      "text": "New task",
+      "isDone": true,
+      "id": 2
+    },
+    {
+      "text": "hello",
+      "isDone": false,
+      "id": 3
+    },
+    {
+      "text": "sdfasdfsd",
+      "isDone": false,
+      "id": 4
+    },
+    {
+      "text": "assdfsda",
+      "isDone": false,
+      "id": 5
+    },
+    {
+      "text": "dgfasdfas",
+      "isDone": false,
+      "id": 6
+    }
+  ]
+}
