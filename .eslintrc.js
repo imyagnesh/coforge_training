@@ -27,6 +27,7 @@ module.exports = {
           '.jsx',
           '.js',
           '.json',
+          '.svg',
         ],
         paths: ['~'],
       },

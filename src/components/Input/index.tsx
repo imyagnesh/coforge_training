@@ -1,19 +1,82 @@
+import IconButton from '@components/IconButton';
 import Typography from '@components/Typography';
-import React from 'react';
-import {View, TextInput, TextInputProps} from 'react-native';
+import useTheme from '@hooks/useTheme';
+import React, {useState} from 'react';
+import {View, TextInput, TextInputProps, Alert, Pressable} from 'react-native';
+import {
+  BorderlessButton,
+  BorderlessButtonProps,
+  gestureHandlerRootHOC,
+} from 'react-native-gesture-handler';
 import {moderateScale} from 'react-native-size-matters';
+import VisibilityIcon from '../../../assets/icons/visibility.svg';
+import VisibilityOffIcon from '../../../assets/icons/visibility_off.svg';
 import useStyles from './useStyles';
 
 interface Props extends TextInputProps {
   error?: string;
 }
 
-const Input = ({style, error, ...rest}: Props) => {
+interface RightIconProps extends BorderlessButtonProps {
+  isPasswordVisible: boolean;
+}
+
+const RightIcon = gestureHandlerRootHOC(
+  ({isPasswordVisible, ...rest}: RightIconProps) => {
+    const styles = useStyles();
+    const theme = useTheme();
+    const IconProps = {
+      height: 24,
+      width: 24,
+      fill: theme.primary,
+    };
+    return (
+      <BorderlessButton
+        {...rest}
+        // style={styles.rightIconStyle}
+      >
+        <View accessible accessibilityRole="button">
+          {isPasswordVisible ? (
+            <VisibilityIcon {...IconProps} />
+          ) : (
+            <VisibilityOffIcon {...IconProps} />
+          )}
+        </View>
+      </BorderlessButton>
+    );
+  },
+  {
+    flex: 0,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    paddingHorizontal: moderateScale(10),
+    height: moderateScale(44, 0.3),
+    justifyContent: 'center',
+  },
+);
+
+const Input = ({style, error, secureTextEntry, ...rest}: Props) => {
   const styles = useStyles(error);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+
   return (
     <View style={{marginVertical: moderateScale(10)}}>
-      <TextInput style={[styles.input, style]} {...rest} />
+      <TextInput
+        style={[styles.input, style]}
+        secureTextEntry={secureTextEntry && !isPasswordVisible}
+        {...rest}
+      />
       {!!error && <Typography variant="inlineError">{error}</Typography>}
+      {!!secureTextEntry && (
+        <RightIcon
+          isPasswordVisible={isPasswordVisible}
+          onPress={() => setIsPasswordVisible(val => !val)}
+        />
+      )}
+      {/* <IconButton
+        component={require('../../../assets/icons/visibility.svg').default}
+      /> */}
     </View>
   );
 };

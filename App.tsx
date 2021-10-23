@@ -10,32 +10,58 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Pressable,
+  Image,
+  useWindowDimensions,
+  ImageBackground,
 } from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 import {moderateScale} from 'react-native-size-matters';
 import Typography from './src/components/Typography';
+import FastImage from 'react-native-fast-image';
 
 interface Props {}
 
 const App = (props: Props) => {
   const theme = useTheme();
+  const {height: screenHeight, width: screenWidth} = useWindowDimensions();
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <Typography
-        variant="h1"
-        allowFontScaling={true}
-        numberOfLines={1}
-        maxFontSizeMultiplier={1.2}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore,
-        officia!
-      </Typography>
-      <View style={{marginHorizontal: moderateScale(10)}}>
-        <Input placeholder="Username" />
-        <Input placeholder="Password" />
-        <Button title="Login" />
-      </View>
-      {/* <Button title="Login" /> */}
-      {/* <TouchableHighlight
+    <ImageBackground
+      source={require('./assets/images/background.jpg')}
+      resizeMode="cover"
+      style={{
+        flex: 1,
+      }}>
+      <SafeAreaView style={{flex: 1}}>
+        <FastImage
+          source={{
+            uri: 'https://reactjs.org/logo-og.png',
+            priority: FastImage.priority.high,
+            cache: FastImage.cacheControl.cacheOnly,
+          }}
+          style={{
+            height: moderateScale(100),
+            width: screenWidth * 0.4,
+            alignSelf: 'center',
+            marginVertical: moderateScale(10),
+          }}
+        />
+        <Typography
+          variant="h1"
+          style={{
+            textAlign: 'center',
+          }}
+          allowFontScaling={true}
+          numberOfLines={1}
+          maxFontSizeMultiplier={1.2}>
+          Login
+        </Typography>
+        <View style={{marginHorizontal: moderateScale(10)}}>
+          <Input placeholder="Username" />
+          <Input placeholder="Password" secureTextEntry />
+          <Button title="Login" />
+        </View>
+        {/* <Button title="Login" /> */}
+        {/* <TouchableHighlight
         onPress={() => {}}
         style={{
           margin: moderateScale(10),
@@ -71,7 +97,7 @@ const App = (props: Props) => {
         </View>
       </TouchableOpacity> */}
 
-      {/* <TouchableWithoutFeedback onPress={() => {}}>
+        {/* <TouchableWithoutFeedback onPress={() => {}}>
         <View
           style={{
             margin: moderateScale(10),
@@ -85,7 +111,7 @@ const App = (props: Props) => {
         </View>
       </TouchableWithoutFeedback> */}
 
-      {/* <TouchableNativeFeedback onPress={() => {}}>
+        {/* <TouchableNativeFeedback onPress={() => {}}>
         <View
           style={{
             margin: moderateScale(10),
@@ -113,7 +139,8 @@ const App = (props: Props) => {
         onPress={() => {}}>
         <Typography variant="btn">Login</Typography>
       </Pressable> */}
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
