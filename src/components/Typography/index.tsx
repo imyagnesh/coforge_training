@@ -3,7 +3,16 @@ import {Text, TextProps, useColorScheme} from 'react-native';
 import useStyles from './useStyles';
 
 interface Props extends TextProps {
-  variant: string;
+  variant:
+    | 'h1'
+    | 'h2'
+    | 'body1'
+    | 'body2'
+    | 'body3'
+    | 'caption'
+    | 'btn'
+    | 'inlineError'
+    | 'error';
 }
 
 const Typography = ({

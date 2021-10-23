@@ -38,6 +38,14 @@ const useStyles = () => {
       letterSpacing: 1,
       color: theme.text,
     },
+    body3: {
+      fontFamily: 'Poppins',
+      fontSize: normalize(16),
+      lineHeight: normalize(16) * 1.2,
+      fontWeight: '400',
+      letterSpacing: 1,
+      color: theme.text,
+    },
     caption: {
       fontFamily: 'Poppins',
       fontSize: normalize(12),

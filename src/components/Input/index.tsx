@@ -1,7 +1,7 @@
 import IconButton from '@components/IconButton';
 import Typography from '@components/Typography';
 import useTheme from '@hooks/useTheme';
-import React, {useState} from 'react';
+import React, {useState, forwardRef} from 'react';
 import {View, TextInput, TextInputProps, Alert, Pressable} from 'react-native';
 import {
   BorderlessButton,
@@ -15,6 +15,7 @@ import useStyles from './useStyles';
 
 interface Props extends TextInputProps {
   error?: string;
+  name: string;
 }
 
 interface RightIconProps extends BorderlessButtonProps {
@@ -56,29 +57,32 @@ const RightIcon = gestureHandlerRootHOC(
   },
 );
 
-const Input = ({style, error, secureTextEntry, ...rest}: Props) => {
-  const styles = useStyles(error);
-  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+const Input = forwardRef<TextInput, Props>(
+  ({style, error, secureTextEntry, ...rest}: Props, ref) => {
+    const styles = useStyles(error);
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
-  return (
-    <View style={{marginVertical: moderateScale(10)}}>
-      <TextInput
-        style={[styles.input, style]}
-        secureTextEntry={secureTextEntry && !isPasswordVisible}
-        {...rest}
-      />
-      {!!error && <Typography variant="inlineError">{error}</Typography>}
-      {!!secureTextEntry && (
-        <RightIcon
-          isPasswordVisible={isPasswordVisible}
-          onPress={() => setIsPasswordVisible(val => !val)}
+    return (
+      <View style={{marginVertical: moderateScale(10)}}>
+        <TextInput
+          ref={ref}
+          style={[styles.input, style]}
+          secureTextEntry={secureTextEntry && !isPasswordVisible}
+          {...rest}
         />
-      )}
-      {/* <IconButton
+        {!!error && <Typography variant="inlineError">{error}</Typography>}
+        {!!secureTextEntry && (
+          <RightIcon
+            isPasswordVisible={isPasswordVisible}
+            onPress={() => setIsPasswordVisible(val => !val)}
+          />
+        )}
+        {/* <IconButton
         component={require('../../../assets/icons/visibility.svg').default}
       /> */}
-    </View>
-  );
-};
+      </View>
+    );
+  },
+);
 
 export default Input;
