@@ -1,23 +1,24 @@
 import React from 'react';
 import {Text, TextProps, useColorScheme} from 'react-native';
-import styles from './styles';
+import useStyles from './useStyles';
 
 interface Props extends TextProps {
   variant: string;
 }
 
-const Typography = ({variant, ...rest}: Props) => {
-  const scheme = useColorScheme();
+const Typography = ({
+  variant,
+  style,
+  allowFontScaling,
+  maxFontSizeMultiplier,
+  ...rest
+}: Props) => {
+  const styles = useStyles();
   return (
     <Text
-      style={[
-        styles[variant],
-        {
-          color: scheme === 'dark' ? '#fff' : '#000',
-        },
-      ]}
-      allowFontScaling={true}
-      maxFontSizeMultiplier={1.2}
+      style={[styles[variant], style]}
+      allowFontScaling={allowFontScaling || true}
+      maxFontSizeMultiplier={maxFontSizeMultiplier || 1.2}
       {...rest}
     />
   );

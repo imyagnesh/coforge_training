@@ -1,19 +1,118 @@
+import Input from '@components/Input';
+import Button from '@components/Button';
+import useTheme from '@hooks/useTheme';
 import React from 'react';
-import {SafeAreaView} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  TouchableHighlight,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Pressable,
+} from 'react-native';
+import {RectButton} from 'react-native-gesture-handler';
+import {moderateScale} from 'react-native-size-matters';
 import Typography from './src/components/Typography';
 
 interface Props {}
 
 const App = (props: Props) => {
+  const theme = useTheme();
   return (
     <SafeAreaView style={{flex: 1}}>
       <Typography
-        variant="caption"
+        variant="h1"
         allowFontScaling={true}
+        numberOfLines={1}
         maxFontSizeMultiplier={1.2}>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore,
         officia!
       </Typography>
+      <View style={{marginHorizontal: moderateScale(10)}}>
+        <Input placeholder="Username" />
+        <Input placeholder="Password" />
+        <Button title="Login" />
+      </View>
+      {/* <Button title="Login" /> */}
+      {/* <TouchableHighlight
+        onPress={() => {}}
+        style={{
+          margin: moderateScale(10),
+          borderRadius: moderateScale(4),
+        }}>
+        <View
+          style={{
+            height: moderateScale(44),
+            backgroundColor: theme.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: moderateScale(4),
+          }}>
+          <Typography variant="btn">Login</Typography>
+        </View>
+      </TouchableHighlight>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        onPress={() => {}}
+        style={{
+          margin: moderateScale(10),
+          borderRadius: moderateScale(4),
+        }}>
+        <View
+          style={{
+            height: moderateScale(44),
+            backgroundColor: theme.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: moderateScale(4),
+          }}>
+          <Typography variant="btn">Login</Typography>
+        </View>
+      </TouchableOpacity> */}
+
+      {/* <TouchableWithoutFeedback onPress={() => {}}>
+        <View
+          style={{
+            margin: moderateScale(10),
+            height: moderateScale(44),
+            backgroundColor: theme.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: moderateScale(4),
+          }}>
+          <Typography variant="btn">Login</Typography>
+        </View>
+      </TouchableWithoutFeedback> */}
+
+      {/* <TouchableNativeFeedback onPress={() => {}}>
+        <View
+          style={{
+            margin: moderateScale(10),
+            borderRadius: moderateScale(4),
+            height: moderateScale(44),
+            backgroundColor: theme.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Typography variant="btn">Login</Typography>
+        </View>
+      </TouchableNativeFeedback>
+      <Pressable
+        style={{
+          margin: moderateScale(10),
+          borderRadius: moderateScale(4),
+          height: moderateScale(44),
+          backgroundColor: theme.primary,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        android_ripple={{
+          color: 'red',
+        }}
+        onPress={() => {}}>
+        <Typography variant="btn">Login</Typography>
+      </Pressable> */}
     </SafeAreaView>
   );
 };
