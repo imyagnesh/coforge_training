@@ -18,8 +18,12 @@ interface Props {
   onChange: (data: CheckboxData[]) => void;
 }
 
-const Checkbox = ({data, onChange}: Props) => {
-  const [checkedData, setCheckedData] = useState<CheckboxData[]>(data);
+const Checkbox = ({
+  field: {name, value}, // { name, value, onChange, onBlur }
+  form: {setFieldValue}, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  data,
+}: Props) => {
+  const [checkedData, setCheckedData] = useState<CheckboxData[]>(value || data);
   const hasRendered = useRef(false);
   const theme = useTheme();
   const iconProps: SvgProps = {
@@ -30,7 +34,7 @@ const Checkbox = ({data, onChange}: Props) => {
 
   useEffect(() => {
     if (hasRendered.current === true) {
-      onChange(checkedData);
+      setFieldValue(name, checkedData[0].value);
     } else {
       hasRendered.current = true;
     }

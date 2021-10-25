@@ -33,7 +33,6 @@ const useStyles = () => {
     body2: {
       fontFamily: 'Poppins',
       fontSize: normalize(18),
-      lineHeight: normalize(18) * 1.2,
       fontWeight: '400',
       letterSpacing: 1,
       color: theme.text,
@@ -41,7 +40,6 @@ const useStyles = () => {
     body3: {
       fontFamily: 'Poppins',
       fontSize: normalize(16),
-      lineHeight: normalize(16) * 1.2,
       fontWeight: '400',
       letterSpacing: 1,
       color: theme.text,

@@ -17,24 +17,17 @@ import FastImage from 'react-native-fast-image';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from 'src/types/RootStackParams';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Formik} from 'formik';
+import {Formik, Field} from 'formik';
 import Checkbox from '@components/ Checkbox';
+import {initialValues, loginFields, LoginFormValues} from './fields';
+import Form from '@components/Form';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Login'> {}
-
-interface MyFormValues {
-  username?: string;
-  password?: string;
-}
 
 const Login = ({navigation}: Props) => {
   const theme = useTheme();
   const passwordRef = useRef<TextInput>();
-  const initialValues: MyFormValues = {
-    username: '',
-    password: '',
-    rememberMe: false,
-  };
+
   const {width: screenWidth} = useWindowDimensions();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -88,75 +81,20 @@ const Login = ({navigation}: Props) => {
               maxFontSizeMultiplier={1.2}>
               Login
             </Typography>
-            <Formik
+            <Form
+              fields={loginFields}
+              btnProps={{
+                title: 'Login',
+              }}
+              initialValues={initialValues}
               onSubmit={values => {
                 console.warn(values);
-                Keyboard.dismiss();
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Main'}],
+                });
               }}
-              validate={values => {
-                const errors: MyFormValues = {};
-                if (!values.username) {
-                  errors.username = 'Username is required...';
-                }
-                if (!values.password) {
-                  errors.password = 'Password is required..';
-                }
-                return errors;
-              }}
-              initialValues={initialValues}>
-              {({
-                values,
-                handleChange,
-                handleSubmit,
-                handleBlur,
-                errors,
-                touched,
-                setFieldValue,
-              }) => (
-                <>
-                  <Input
-                    value={values.username}
-                    onChangeText={handleChange('username')}
-                    onBlur={handleBlur('username')}
-                    name="username"
-                    error={touched.username ? errors.username : ''}
-                    placeholder="Username"
-                    keyboardType="email-address"
-                    returnKeyType="next"
-                    autoComplete="email"
-                    textContentType="emailAddress"
-                    onSubmitEditing={() => {
-                      passwordRef.current?.focus();
-                    }}
-                  />
-                  <Input
-                    value={values.password}
-                    name="password"
-                    error={touched.password ? errors.password : ''}
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    ref={passwordRef}
-                    placeholder="Password"
-                    autoComplete="password"
-                    textContentType="password"
-                    returnKeyType="go"
-                    secureTextEntry
-                  />
-                  <Checkbox
-                    data={[
-                      {
-                        text: 'Remeber Me',
-                        value: false,
-                      },
-                    ]}
-                    onChange={data => {
-                      setFieldValue('rememberMe', data[0].value);
-                    }}
-                  />
-                  <Button title="Login" onPress={handleSubmit} />
-                </>
-              )}
-            </Formik>
+            />
             <Typography
               variant="body3"
               style={{

@@ -57,32 +57,37 @@ const RightIcon = gestureHandlerRootHOC(
   },
 );
 
-const Input = forwardRef<TextInput, Props>(
-  ({style, error, secureTextEntry, ...rest}: Props, ref) => {
-    const styles = useStyles(error);
-    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+const Input = ({
+  field: {name, value}, // { name, value, onChange, onBlur }
+  form: {touched, errors, handleChange, handleBlur}, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+  style,
+  innerRef,
+  secureTextEntry,
+  ...rest
+}: Props) => {
+  const error = touched[name] && errors[name];
+  const styles = useStyles(error);
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
 
-    return (
-      <View style={{marginVertical: moderateScale(10)}}>
-        <TextInput
-          ref={ref}
-          style={[styles.input, style]}
-          secureTextEntry={secureTextEntry && !isPasswordVisible}
-          {...rest}
+  return (
+    <View style={{marginVertical: moderateScale(10)}}>
+      <TextInput
+        ref={innerRef}
+        value={value}
+        onChangeText={handleChange(name)}
+        onBlur={handleBlur(name)}
+        style={[styles.input, style]}
+        secureTextEntry={secureTextEntry && !isPasswordVisible}
+        {...rest}
+      />
+      {!!error && <Typography variant="inlineError">{error}</Typography>}
+      {!!secureTextEntry && (
+        <RightIcon
+          isPasswordVisible={isPasswordVisible}
+          onPress={() => setIsPasswordVisible(val => !val)}
         />
-        {!!error && <Typography variant="inlineError">{error}</Typography>}
-        {!!secureTextEntry && (
-          <RightIcon
-            isPasswordVisible={isPasswordVisible}
-            onPress={() => setIsPasswordVisible(val => !val)}
-          />
-        )}
-        {/* <IconButton
-        component={require('../../../assets/icons/visibility.svg').default}
-      /> */}
-      </View>
-    );
-  },
-);
-
+      )}
+    </View>
+  );
+};
 export default Input;
