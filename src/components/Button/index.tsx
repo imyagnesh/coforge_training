@@ -7,10 +7,11 @@ import useStyles from './useStyles';
 export interface ButtonProps extends RectButtonProps {
   textStyle?: TextProps['style'];
   title: string;
+  disable: boolean;
 }
 
-const Button = ({style, title, textStyle, ...rest}: ButtonProps) => {
-  const styles = useStyles();
+const Button = ({style, title, disable, textStyle, ...rest}: ButtonProps) => {
+  const styles = useStyles(disable);
   return (
     <RectButton style={[styles.btn, style]} {...rest}>
       <View accessible accessibilityRole="button">

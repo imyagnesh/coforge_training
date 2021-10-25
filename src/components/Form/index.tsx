@@ -1,6 +1,8 @@
 import Button, {ButtonProps} from '@components/Button';
+import Typography from '@components/Typography';
+import Toast from 'react-native-toast-message';
 import {Field, Formik, FormikProps} from 'formik';
-import React from 'react';
+import React, {useRef} from 'react';
 import {Keyboard} from 'react-native';
 
 interface Props {
@@ -8,15 +10,26 @@ interface Props {
 }
 
 const Form = ({fields, btnProps, ...rest}: Props) => {
+  const toastRef = useRef(null);
   return (
     <Formik {...rest}>
-      {({handleSubmit}) => {
+      {({handleSubmit, isSubmitting, errors}) => {
         const submitForm = () => {
           handleSubmit();
           Keyboard.dismiss();
         };
+        if (!!errors.serverError) {
+          toastRef?.current?.show({
+            type: 'error',
+            text1: errors.serverError,
+          });
+        } else {
+          toastRef?.current?.hide();
+        }
+
         return (
           <>
+            <Toast ref={toastRef} />
             {fields.map(x => {
               const fieldProps = x;
               if (fieldProps.returnKeyType === 'go') {
@@ -24,7 +37,7 @@ const Form = ({fields, btnProps, ...rest}: Props) => {
               }
               return <Field key={x.name} {...fieldProps} />;
             })}
-            <Button onPress={submitForm} {...btnProps} />
+            <Button disable={isSubmitting} onPress={submitForm} {...btnProps} />
           </>
         );
       }}

@@ -21,15 +21,23 @@ import {Formik, Field} from 'formik';
 import Checkbox from '@components/ Checkbox';
 import {initialValues, loginFields, LoginFormValues} from './fields';
 import Form from '@components/Form';
+import {connect} from 'react-redux';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Login'> {}
 
-const Login = ({navigation}: Props) => {
+const Login = ({navigation, xyz, loadUser}: Props) => {
+  console.warn('users', xyz);
+
   const theme = useTheme();
   const passwordRef = useRef<TextInput>();
 
   const {width: screenWidth} = useWindowDimensions();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+
+  useEffect(() => {
+    loadUser({id: 1, name: 'yagnesh modh', gender: 'male'});
+    return () => {};
+  }, []);
 
   useEffect(() => {
     const keyboardDidShow = Keyboard.addListener('keyboardDidShow', () => {
@@ -119,7 +127,24 @@ const Login = ({navigation}: Props) => {
   );
 };
 
-export default Login;
+const mapStateToProps = state => {
+  return {
+    xyz: state.user,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    loadUser: payload => {
+      dispatch({
+        type: 'LOAD_USER_SUCCESS',
+        payload,
+      });
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 /**
  * Sample React Native App
