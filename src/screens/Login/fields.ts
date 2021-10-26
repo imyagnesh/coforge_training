@@ -9,19 +9,20 @@ const passwordRef = createRef();
 const Required = (value: string, message: string) => (!value ? message : '');
 
 export interface LoginFormValues {
-  username?: string;
+  email?: string;
   password?: string;
   rememberMe: false;
 }
 
 export const loginFields = [
   {
-    name: 'username',
+    name: 'email',
     component: Input,
     placeholder: 'Username',
     keyboardType: 'email-address',
     returnKeyType: 'next',
     autoComplete: 'email',
+    autoCapitalize: 'none',
     textContentType: 'emailAddress',
     onSubmitEditing: () => {
       passwordRef.current?.focus();
@@ -56,7 +57,7 @@ export const loginFields = [
 ];
 
 export const initialValues: LoginFormValues = {
-  username: '',
+  email: '',
   password: '',
   rememberMe: false,
 };

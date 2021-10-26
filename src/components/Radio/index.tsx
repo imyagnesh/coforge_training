@@ -1,5 +1,5 @@
 import Typography from '@components/Typography';
-import useTheme from '@hooks/useTheme';
+import {useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {View, Text, FlatList} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
@@ -23,7 +23,7 @@ const Radio = ({
 }: Props) => {
   console.warn(errors);
   const [selectedOption, setselectedOption] = useState(data);
-  const theme = useTheme();
+  const {colors} = useTheme();
   const error = errors[name];
   const toggleRadio = item => {
     const newSelectedOptions = data.map(x => {
@@ -47,14 +47,14 @@ const Radio = ({
           <RadioIcon
             height={24}
             width={24}
-            fill={theme.primary}
+            fill={colors.primary}
             style={{marginRight: 10}}
           />
         ) : (
           <RadioUncheckedIcon
             height={24}
             width={24}
-            fill={theme.primary}
+            fill={colors.primary}
             style={{marginRight: 10}}
           />
         )}

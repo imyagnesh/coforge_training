@@ -1,9 +1,9 @@
+import {useTheme} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
-import useTheme from '../../hooks/useTheme';
 import normalize from '../../utils/normalize';
 
 const useStyles = () => {
-  const theme = useTheme();
+  const {colors} = useTheme();
   return StyleSheet.create({
     h1: {
       fontFamily: 'Poppins',
@@ -12,7 +12,7 @@ const useStyles = () => {
       fontWeight: '700',
       letterSpacing: 1.1,
       textTransform: 'capitalize',
-      color: theme.text,
+      color: colors.text,
     },
     h2: {
       fontFamily: 'Poppins',
@@ -20,7 +20,15 @@ const useStyles = () => {
       lineHeight: normalize(24) * 1.3,
       fontWeight: '500',
       letterSpacing: 1,
-      color: theme.text,
+      color: colors.text,
+    },
+    h3: {
+      fontFamily: 'Poppins',
+      fontSize: normalize(22),
+      lineHeight: normalize(22) * 1.3,
+      fontWeight: '500',
+      letterSpacing: 1,
+      color: colors.text,
     },
     body1: {
       fontFamily: 'Poppins',
@@ -28,21 +36,21 @@ const useStyles = () => {
       lineHeight: normalize(20) * 1.2,
       fontWeight: '500',
       letterSpacing: 1,
-      color: theme.text,
+      color: colors.text,
     },
     body2: {
       fontFamily: 'Poppins',
       fontSize: normalize(18),
       fontWeight: '400',
       letterSpacing: 1,
-      color: theme.text,
+      color: colors.text,
     },
     body3: {
       fontFamily: 'Poppins',
       fontSize: normalize(16),
       fontWeight: '400',
       letterSpacing: 1,
-      color: theme.text,
+      color: colors.text,
     },
     caption: {
       fontFamily: 'Poppins',
@@ -50,7 +58,7 @@ const useStyles = () => {
       lineHeight: normalize(12) * 1.2,
       fontWeight: '400',
       letterSpacing: 0.8,
-      color: theme.text,
+      color: colors.text,
     },
     btn: {
       fontFamily: 'Poppins',
@@ -64,19 +72,17 @@ const useStyles = () => {
     inlineError: {
       fontFamily: 'Poppins',
       fontSize: normalize(14),
-      lineHeight: normalize(14) * 1.2,
       fontWeight: '400',
       letterSpacing: 1,
-      color: theme.notification,
+      color: colors.notification,
       textTransform: 'capitalize',
     },
     error: {
       fontFamily: 'Poppins',
       fontSize: 18,
       fontWeight: '500',
-      lineHeight: 22,
       letterSpacing: 1.2,
-      color: theme.notification,
+      color: colors.notification,
       textTransform: 'capitalize',
     },
   });
