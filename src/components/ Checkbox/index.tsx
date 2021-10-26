@@ -3,10 +3,10 @@ import {View, Text, Alert} from 'react-native';
 import CheckboxOutlineIcon from '@assets/icons/check_box_outline.svg';
 import CheckboxIcon from '@assets/icons/check_box.svg';
 import {SvgProps} from 'react-native-svg';
-import useTheme from '@hooks/useTheme';
 import Typography from '@components/Typography';
 import {moderateScale} from 'react-native-size-matters';
 import {BorderlessButton, RectButton} from 'react-native-gesture-handler';
+import {useTheme} from '@react-navigation/native';
 
 type CheckboxData = {
   text: string;
@@ -25,11 +25,11 @@ const Checkbox = ({
 }: Props) => {
   const [checkedData, setCheckedData] = useState<CheckboxData[]>(value || data);
   const hasRendered = useRef(false);
-  const theme = useTheme();
+  const {colors} = useTheme();
   const iconProps: SvgProps = {
     height: 24,
     width: 24,
-    fill: theme.primary,
+    fill: colors.primary,
   };
 
   useEffect(() => {

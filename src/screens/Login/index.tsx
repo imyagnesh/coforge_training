@@ -1,6 +1,5 @@
 import Input from '@components/Input';
 import Button from '@components/Button';
-import useTheme from '@hooks/useTheme';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
@@ -22,22 +21,18 @@ import Checkbox from '@components/ Checkbox';
 import {initialValues, loginFields, LoginFormValues} from './fields';
 import Form from '@components/Form';
 import {connect} from 'react-redux';
+import {authenticateUser} from '@utils/index';
+import axiosInstance from '@utils/axiosInstance';
+import {useTheme} from '@react-navigation/native';
 
 interface Props extends NativeStackScreenProps<RootStackParamList, 'Login'> {}
 
-const Login = ({navigation, xyz, loadUser}: Props) => {
-  console.warn('users', xyz);
-
-  const theme = useTheme();
+const Login = ({navigation}: Props) => {
+  const {colors} = useTheme();
   const passwordRef = useRef<TextInput>();
 
   const {width: screenWidth} = useWindowDimensions();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-
-  useEffect(() => {
-    loadUser({id: 1, name: 'yagnesh modh', gender: 'male'});
-    return () => {};
-  }, []);
 
   useEffect(() => {
     const keyboardDidShow = Keyboard.addListener('keyboardDidShow', () => {
@@ -51,6 +46,23 @@ const Login = ({navigation, xyz, loadUser}: Props) => {
       keyboardDidHide.remove();
     };
   }, []);
+
+  const onSubmit = async (values, actions) => {
+    try {
+      const {rememberMe, ...rest} = values;
+      const res = await axiosInstance.post('login', rest);
+      await authenticateUser(res.data);
+      actions.resetForm();
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Main'}],
+      });
+    } catch (error) {
+      actions.setErrors({
+        serverError: error?.response?.data || error.message,
+      });
+    }
+  };
 
   return (
     <ImageBackground
@@ -95,13 +107,7 @@ const Login = ({navigation, xyz, loadUser}: Props) => {
                 title: 'Login',
               }}
               initialValues={initialValues}
-              onSubmit={values => {
-                console.warn(values);
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'Main'}],
-                });
-              }}
+              onSubmit={onSubmit}
             />
             <Typography
               variant="body3"
@@ -114,7 +120,7 @@ const Login = ({navigation, xyz, loadUser}: Props) => {
                 onPress={() => navigation.navigate('Register')}
                 variant="body2"
                 style={{
-                  color: theme.primary,
+                  color: colors.primary,
                   fontWeight: '700',
                 }}>
                 Sign Up
@@ -127,24 +133,7 @@ const Login = ({navigation, xyz, loadUser}: Props) => {
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    xyz: state.user,
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    loadUser: payload => {
-      dispatch({
-        type: 'LOAD_USER_SUCCESS',
-        payload,
-      });
-    },
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default Login;
 
 /**
  * Sample React Native App
@@ -273,7 +262,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
         <View
           style={{
             height: moderateScale(44),
-            backgroundColor: theme.primary,
+            backgroundColor: colors.primary,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: moderateScale(4),
@@ -291,7 +280,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
         <View
           style={{
             height: moderateScale(44),
-            backgroundColor: theme.primary,
+            backgroundColor: colors.primary,
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: moderateScale(4),
@@ -305,7 +294,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
             style={{
               margin: moderateScale(10),
               height: moderateScale(44),
-              backgroundColor: theme.primary,
+              backgroundColor: colors.primary,
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: moderateScale(4),
@@ -320,7 +309,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
               margin: moderateScale(10),
               borderRadius: moderateScale(4),
               height: moderateScale(44),
-              backgroundColor: theme.primary,
+              backgroundColor: colors.primary,
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -332,7 +321,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
             margin: moderateScale(10),
             borderRadius: moderateScale(4),
             height: moderateScale(44),
-            backgroundColor: theme.primary,
+            backgroundColor: colors.primary,
             justifyContent: 'center',
             alignItems: 'center',
           }}

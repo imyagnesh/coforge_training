@@ -1,6 +1,6 @@
 import IconButton from '@components/IconButton';
 import Typography from '@components/Typography';
-import useTheme from '@hooks/useTheme';
+import {useTheme} from '@react-navigation/native';
 import React, {useState, forwardRef} from 'react';
 import {View, TextInput, TextInputProps, Alert, Pressable} from 'react-native';
 import {
@@ -25,11 +25,11 @@ interface RightIconProps extends BorderlessButtonProps {
 const RightIcon = gestureHandlerRootHOC(
   ({isPasswordVisible, ...rest}: RightIconProps) => {
     const styles = useStyles();
-    const theme = useTheme();
+    const {colors} = useTheme();
     const IconProps = {
       height: 24,
       width: 24,
-      fill: theme.primary,
+      fill: colors.primary,
     };
     return (
       <BorderlessButton

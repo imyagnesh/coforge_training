@@ -18,18 +18,21 @@ const Form = ({fields, btnProps, ...rest}: Props) => {
           handleSubmit();
           Keyboard.dismiss();
         };
-        if (!!errors.serverError) {
-          toastRef?.current?.show({
-            type: 'error',
-            text1: errors.serverError,
-          });
-        } else {
-          toastRef?.current?.hide();
-        }
+        // if (!!errors.serverError) {
+        //   toastRef?.current?.show({
+        //     type: 'error',
+        //     text1: errors.serverError,
+        //   });
+        // } else {
+        //   toastRef?.current?.hide();
+        // }
 
         return (
           <>
-            <Toast ref={toastRef} />
+            {/* <Toast ref={toastRef} /> */}
+            {!!errors.serverError && (
+              <Typography variant="error">{errors.serverError}</Typography>
+            )}
             {fields.map(x => {
               const fieldProps = x;
               if (fieldProps.returnKeyType === 'go') {

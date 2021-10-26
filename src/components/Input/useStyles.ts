@@ -1,10 +1,10 @@
+import {useTheme} from '@react-navigation/native';
 import {StyleSheet} from 'react-native';
-import useTheme from '../../hooks/useTheme';
 import {moderateScale} from 'react-native-size-matters';
 import normalize from '../../utils/normalize';
 
 const useStyles = (error?: string) => {
-  const theme = useTheme();
+  const {colors} = useTheme();
   return StyleSheet.create({
     input: {
       height: moderateScale(44, 0.3),
@@ -15,8 +15,8 @@ const useStyles = (error?: string) => {
       fontFamily: 'Poppins',
       fontWeight: '500',
       borderRadius: moderateScale(4),
-      color: theme.text,
-      borderColor: !!error ? theme.notification : theme.border,
+      color: colors.text,
+      borderColor: !!error ? colors.notification : colors.border,
       zIndex: 0,
     },
     rightIconStyle: {

@@ -5,24 +5,27 @@ import {View, Text} from 'react-native';
 import {useHeaderHeight} from '@react-navigation/elements';
 import {initialValues, registerFields} from './fields';
 import axios from 'axios';
+import {authenticateUser} from '@utils/index';
+import axiosInstance from '@utils/axiosInstance';
 
 interface Props {}
 
-const wait = time => new Promise(resolve => setTimeout(resolve, time));
-
-const Register = (props: Props) => {
+const Register = ({navigation: {reset}}: Props) => {
   const headerHeight = useHeaderHeight();
 
   const onSubmit = async (values, actions) => {
     try {
       const {confirmPassword, ...rest} = values;
-      const res = await axios.post('http://localhost:3000/register', rest);
-      await wait(3000);
-      console.warn('res', res.data);
+      const res = await axiosInstance.post('register', rest);
+      await authenticateUser(res.data);
       actions.resetForm();
+      reset({
+        index: 0,
+        routes: [{name: 'Main'}],
+      });
     } catch (error) {
       actions.setErrors({
-        serverError: error?.response?.data,
+        serverError: error?.response?.data || error.message,
       });
     }
   };
