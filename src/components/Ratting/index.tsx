@@ -16,7 +16,9 @@ const Ratting = ({ratting: {rate}}: Props) => {
             Icon = require('@assets/icons/star_outline.svg').default;
           }
 
-          return <Icon height={24} width={24} fill={colors.notification} />;
+          return (
+            <Icon key={x} height={24} width={24} fill={colors.notification} />
+          );
         })}
       </View>
       <Typography variant="inlineError">{rate}</Typography>
