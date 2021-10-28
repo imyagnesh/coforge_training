@@ -3,6 +3,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import IconButton from '@components/IconButton';
 import {Alert} from 'react-native';
 import {removeUser} from '@utils/index';
+import SearchStackNavigation from './SearchStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -58,8 +59,11 @@ const HomeTab = ({}: Props) => {
         getComponent={() => require('@screens/Home').default}
       />
       <Tab.Screen
+        options={{
+          headerShown: false,
+        }}
         name="Search"
-        getComponent={() => require('@screens/Search').default}
+        component={SearchStackNavigation}
       />
       <Tab.Screen
         name="Settings"

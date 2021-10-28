@@ -1,12 +1,20 @@
+import Button from '@components/Button';
 import React from 'react';
-import {View, Text} from 'react-native';
+import {View} from 'react-native';
 
 interface Props {}
 
-const Search = (props: Props) => {
+const Search = ({navigation: {navigate}}: Props) => {
   return (
-    <View>
-      <Text>Search Page</Text>
+    <View style={{flex: 1}}>
+      <Button
+        title="Go TO video Player"
+        onPress={() => navigate('VideoPlayer')}
+      />
+      <Button
+        title="Go TO Animation Page"
+        onPress={() => navigate('Animate')}
+      />
     </View>
   );
 };
