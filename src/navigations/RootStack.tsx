@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStack = (props: Props) => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="ScrollAnimation">
       <Stack.Screen
         options={{
           headerShown: false,
@@ -40,6 +40,11 @@ const RootStack = (props: Props) => {
         <Stack.Screen
           name="VideoPlayer"
           getComponent={() => require('../screens/VideoPlayer').default}
+        />
+
+        <Stack.Screen
+          name="ScrollAnimation"
+          getComponent={() => require('../screens/ScrollAnimation').default}
         />
       </Stack.Group>
     </Stack.Navigator>
