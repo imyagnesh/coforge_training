@@ -33,6 +33,15 @@ const RootStack = (props: Props) => {
         name="Main"
         component={HomeTab}
       />
+      <Stack.Group
+        screenOptions={{
+          presentation: 'modal',
+        }}>
+        <Stack.Screen
+          name="VideoPlayer"
+          getComponent={() => require('../screens/VideoPlayer').default}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

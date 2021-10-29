@@ -11,6 +11,11 @@ import * as I18n from 'i18n-js';
 import Ratting from '@components/Ratting';
 import {RectButton} from 'react-native-gesture-handler';
 import {useTheme} from '@react-navigation/native';
+import Button from '@components/Button';
+
+const ITEM_HEIGHT = 300;
+
+const wait = time => new Promise(resolve => setTimeout(resolve, time));
 
 interface Props {}
 
@@ -19,6 +24,8 @@ const Home = ({}: Props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
+  const [previousData, setPreviousData] = useState([]);
+  const [columnNum, setColumnNum] = useState(1);
   const {colors} = useTheme();
 
   const loadProducts = useCallback(async currentPage => {
@@ -27,7 +34,13 @@ const Home = ({}: Props) => {
       const res = await axiosInstance.get(
         `660/products?_page=${currentPage}&_limit=5`,
       );
-      setData(val => [...val, ...res.data]);
+      await wait(3000);
+      setPreviousData(res.data);
+      if (currentPage > 1) {
+        setData(val => [...val, ...res.data]);
+      } else {
+        setData(res.data);
+      }
     } catch (err) {
       setError(err);
     } finally {
@@ -39,12 +52,16 @@ const Home = ({}: Props) => {
     loadProducts(page);
   }, [loadProducts, page]);
 
-  const renderItem = ({item}) => {
+  const renderItem = useCallback(({item}) => {
     return (
-      <RectButton
-        onPress={() => Alert.alert('Hi')}
-        style={{flex: 1, flexDirection: 'row', paddingVertical: 8}}>
-        <View style={{flex: 1}}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          backgroundColor: '#fff',
+          borderRadius: 10,
+        }}>
+        <View>
           <FastImage
             source={{
               uri: item.image,
@@ -55,7 +72,11 @@ const Home = ({}: Props) => {
             resizeMode="contain"
           />
         </View>
-        <View style={{flex: 2, paddingHorizontal: 8}}>
+
+        <View style={{paddingHorizontal: 8}}>
+          <Typography variant="h3" numberOfLines={1}>
+            {`Column Number: ${columnNum}`}
+          </Typography>
           <Typography variant="h3" numberOfLines={1}>
             {item.title}
           </Typography>
@@ -67,21 +88,27 @@ const Home = ({}: Props) => {
           </Typography>
           <Ratting ratting={item.rating} />
         </View>
-      </RectButton>
+      </View>
     );
-  };
+  }, []);
 
   const keyExtractor = item => `${item.id}`;
 
-  const onEndReached = () => {
-    setPage(val => val + 1);
-  };
+  const onEndReached = useCallback(() => {
+    if (previousData !== []) {
+      setPage(val => val + 1);
+    }
+  }, [previousData]);
 
   const itemSeparatorComponent = () => {
     return <View style={{height: 1, backgroundColor: colors.border}} />;
   };
 
-  const ListHeaderComponent = () => {
+  const onRefresh = useCallback(() => {
+    loadProducts(1);
+  }, []);
+
+  const ListFooterComponent = () => {
     if (loading) {
       return <Loader />;
     }
@@ -91,24 +118,61 @@ const Home = ({}: Props) => {
   if (error) {
     return (
       <Typography variant="error">
-        {error.response.data || error.message}
+        {error?.response?.data || error?.message}
       </Typography>
     );
   }
 
+  // return (
+  //   <View>
+  //     <FlatList
+  //       horizontal
+  //       data={data}
+  //       renderItem={renderItem}
+  //       keyExtractor={keyExtractor}
+  //       showsHorizontalScrollIndicator={false}
+  //       snapToAlignment="center"
+  //       snapToInterval={304}
+  //       decelerationRate="fast"
+  //       ItemSeparatorComponent={() => (
+  //         <View
+  //           style={{
+  //             width: 8,
+  //           }}
+  //         />
+  //       )}
+  //       contentContainerStyle={{
+  //         margin: 8,
+  //       }}
+  //     />
+  //     <View style={{flex: 1}} />
+  //   </View>
+  // );
+
   return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      ItemSeparatorComponent={itemSeparatorComponent}
-      ListHeaderComponent={ListHeaderComponent}
-      removeClippedSubviews
-      maxToRenderPerBatch={8}
-      initialNumToRender={8}
-      windowSize={11}
-      onEndReached={onEndReached}
-    />
+    <>
+      <Button
+        title="Chage Page View"
+        onPress={() => {
+          setColumnNum(val => (val === 1 ? 2 : 1));
+        }}
+      />
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        extraData={columnNum}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={itemSeparatorComponent}
+        ListFooterComponent={ListFooterComponent}
+        removeClippedSubviews
+        maxToRenderPerBatch={8}
+        initialNumToRender={8}
+        windowSize={11}
+        onEndReached={onEndReached}
+        refreshing={loading}
+        onRefresh={onRefresh}
+      />
+    </>
   );
 
   // return (
