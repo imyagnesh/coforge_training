@@ -38,6 +38,10 @@ const RootStack = (props: Props) => {
           presentation: 'modal',
         }}>
         <Stack.Screen
+          name="Cart"
+          getComponent={() => require('../screens/Cart').default}
+        />
+        <Stack.Screen
           name="VideoPlayer"
           getComponent={() => require('../screens/VideoPlayer').default}
         />

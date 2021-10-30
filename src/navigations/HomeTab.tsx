@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import IconButton from '@components/IconButton';
-import {Alert} from 'react-native';
+import {Alert, View} from 'react-native';
 import {removeUser} from '@utils/index';
 import SearchStackNavigation from './SearchStack';
 import ProductsProvider from 'src/contexts/productsProvider';
@@ -37,21 +37,36 @@ const HomeTab = ({}: Props) => {
             },
             headerRight: () => {
               return (
-                <IconButton
-                  component={require('@assets/icons/logout.svg').default}
-                  style={{paddingRight: 10}}
-                  onPress={async () => {
-                    try {
-                      await removeUser();
-                      navigation.reset({
-                        index: 0,
-                        routes: [{name: 'Login'}],
-                      });
-                    } catch (error) {
-                      console.warn(error);
+                <View style={{flexDirection: 'row'}}>
+                  <IconButton
+                    component={
+                      require('@assets/icons/shopping_cart.svg').default
                     }
-                  }}
-                />
+                    style={{paddingRight: 20}}
+                    onPress={async () => {
+                      try {
+                        navigation.navigate('Cart');
+                      } catch (error) {
+                        console.warn(error);
+                      }
+                    }}
+                  />
+                  <IconButton
+                    component={require('@assets/icons/logout.svg').default}
+                    style={{paddingRight: 10}}
+                    onPress={async () => {
+                      try {
+                        await removeUser();
+                        navigation.reset({
+                          index: 0,
+                          routes: [{name: 'Login'}],
+                        });
+                      } catch (error) {
+                        console.warn(error);
+                      }
+                    }}
+                  />
+                </View>
               );
             },
           };

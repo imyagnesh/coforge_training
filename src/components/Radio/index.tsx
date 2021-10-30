@@ -21,7 +21,6 @@ const Radio = ({
   form: {setFieldValue, touched, errors},
   data,
 }: Props) => {
-  console.warn(errors);
   const [selectedOption, setselectedOption] = useState(data);
   const {colors} = useTheme();
   const error = errors[name];

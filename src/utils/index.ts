@@ -22,8 +22,6 @@ export const removeUser = async () => {
     });
     await AsyncStorage.clear();
   } catch (error) {
-    console.warn(error.message);
-
     throw new Error('Unable to logout');
   }
 };
