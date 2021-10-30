@@ -9,7 +9,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootStack = (props: Props) => {
   return (
-    <Stack.Navigator initialRouteName="ScrollAnimation">
+    <Stack.Navigator>
       <Stack.Screen
         options={{
           headerShown: false,

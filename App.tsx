@@ -1,7 +1,7 @@
-import React from 'react';
+import i18n from 'i18n-js';
+import React, {useEffect, useMemo} from 'react';
 import {
   NavigationContainer,
-  useNavigationContainerRef,
   DefaultTheme,
   DarkTheme,
 } from '@react-navigation/native';
@@ -11,35 +11,50 @@ import store from './src/configureStore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useColorScheme} from 'react-native';
 import navigationRef from './src/navigationRef';
+import ThemeProvider, {ThemeContext} from 'src/contexts/themeContext';
+import {setI18nConfig} from './src/i18nConfig';
+import LocaleProvider from 'src/contexts/localeProvider';
 
 interface Props {}
 
 const App = (props: Props) => {
   const scheme = useColorScheme();
 
+  useEffect(() => {
+    setI18nConfig();
+  }, []);
+
   const onReady = async () => {
-    // const userInfo = await AsyncStorage.getItem('@userInfo');
-    // if (userInfo) {
-    //   store.dispatch({
-    //     type: 'LOAD_USER_SUCCESS',
-    //     payload: JSON.parse(userInfo),
-    //   });
-    //   navigationRef.reset({
-    //     index: 0,
-    //     routes: [{name: 'Main'}],
-    //   });
-    // }
+    const userInfo = await AsyncStorage.getItem('@userInfo');
+    if (userInfo) {
+      store.dispatch({
+        type: 'LOAD_USER_SUCCESS',
+        payload: JSON.parse(userInfo),
+      });
+      navigationRef.reset({
+        index: 0,
+        routes: [{name: 'Main'}],
+      });
+    }
   };
 
   return (
-    <Provider store={store}>
-      <NavigationContainer
-        ref={navigationRef}
-        onReady={onReady}
-        theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <RootStack />
-      </NavigationContainer>
-    </Provider>
+    <LocaleProvider>
+      <ThemeProvider>
+        <Provider store={store}>
+          <ThemeContext.Consumer>
+            {({theme}) => (
+              <NavigationContainer
+                ref={navigationRef}
+                onReady={onReady}
+                theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <RootStack />
+              </NavigationContainer>
+            )}
+          </ThemeContext.Consumer>
+        </Provider>
+      </ThemeProvider>
+    </LocaleProvider>
   );
 };
 

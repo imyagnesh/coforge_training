@@ -1,6 +1,6 @@
 import Input from '@components/Input';
 import Button from '@components/Button';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {
   View,
   useWindowDimensions,
