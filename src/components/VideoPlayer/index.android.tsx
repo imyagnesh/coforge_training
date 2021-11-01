@@ -114,7 +114,6 @@ const VideoPlayer = ({setOptions}: Props) => {
   };
 
   const handlePlayPause = () => {
-    console.warn('hello');
     if (play) {
       setPlay(false);
       setShowControls(true);

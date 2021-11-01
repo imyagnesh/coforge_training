@@ -38,8 +38,17 @@ const RootStack = (props: Props) => {
           presentation: 'modal',
         }}>
         <Stack.Screen
+          name="Cart"
+          getComponent={() => require('../screens/Cart').default}
+        />
+        <Stack.Screen
           name="VideoPlayer"
           getComponent={() => require('../screens/VideoPlayer').default}
+        />
+
+        <Stack.Screen
+          name="ScrollAnimation"
+          getComponent={() => require('../screens/ScrollAnimation').default}
         />
       </Stack.Group>
     </Stack.Navigator>

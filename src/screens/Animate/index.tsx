@@ -12,14 +12,20 @@ import Animated, {
   interpolate,
   interpolateColor,
 } from 'react-native-reanimated';
-import {TapGestureHandler} from 'react-native-gesture-handler';
+import {
+  TapGestureHandler,
+  PanGestureHandler,
+} from 'react-native-gesture-handler';
 
 const AnimatedImage = Animated.createAnimatedComponent(FastImage);
 
 interface Props {}
 
 const Animate = (props: Props) => {
-  const scale = useSharedValue(1);
+  // const scale = useSharedValue(1);
+  const pressed = useSharedValue(false);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
 
   //   const animateBall = useAnimatedStyle(() => {
   //     return {
@@ -42,33 +48,48 @@ const Animate = (props: Props) => {
 
   const animateBall = useAnimatedStyle(() => {
     return {
-      backgroundColor: interpolateColor(
-        scale.value,
-        [1, 1.1, 1.2, 1.3],
-        ['red', 'blue', 'green', 'yellow'],
-      ),
+      backgroundColor: pressed.value ? 'yellow' : 'red',
       transform: [
         {
-          scale: withTiming(scale.value, {
-            duration: 500,
-          }),
+          translateX: withSpring(translateX.value),
+        },
+        {
+          translateY: withSpring(translateY.value),
         },
       ],
     };
   });
 
-  const handleGestureEvent = useAnimatedGestureHandler({
-    onStart: () => {
-      scale.value = withTiming(1.3);
+  // const handleGestureEvent = useAnimatedGestureHandler({
+  //   onStart: () => {
+  //     pressed.value = true;
+  //   },
+  //   onEnd: () => {
+  //     pressed.value = false;
+  //   },
+  // });
+
+  const panGestureEvent = useAnimatedGestureHandler({
+    onStart: (event, data) => {
+      pressed.value = true;
+      data.x = translateX.value;
+      data.y = translateY.value;
     },
-    onEnd: () => {
-      scale.value = 1;
+    onActive: (event, data) => {
+      translateX.value = data.x + event.translationX;
+      translateY.value = data.y + event.translationY;
+    },
+    onEnd: (event, data) => {
+      // translateX.value = 0;
+      // translateY.value = 0;
+      pressed.value = false;
     },
   });
 
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <TapGestureHandler onGestureEvent={handleGestureEvent}>
+      {/* <TapGestureHandler onGestureEvent={handleGestureEvent}> */}
+      <PanGestureHandler onGestureEvent={panGestureEvent}>
         <Animated.View
           style={[
             {
@@ -79,7 +100,8 @@ const Animate = (props: Props) => {
             animateBall,
           ]}
         />
-      </TapGestureHandler>
+      </PanGestureHandler>
+      {/* </TapGestureHandler> */}
 
       {/* <AnimatedImage
         source={{

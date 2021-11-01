@@ -1,6 +1,7 @@
 import Button from '@components/Button';
-import React from 'react';
+import React, {useContext} from 'react';
 import {View} from 'react-native';
+import {ProductsContext} from 'src/contexts/productsProvider';
 
 interface Props {}
 

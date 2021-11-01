@@ -1,6 +1,7 @@
 import axios from 'axios';
 import SInfo from 'react-native-sensitive-info';
 import Config from 'react-native-config';
+import navigationRef from '../navigationRef';
 
 const axiosInstance = axios.create({
   baseURL: Config.API_URL,
@@ -19,6 +20,8 @@ axiosInstance.interceptors.request.use(
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
+
+    // navigationRef.navigate('Login');
 
     return config;
   },

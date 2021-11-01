@@ -1,9 +1,16 @@
+import Button from '@components/Button';
 import ImagePicker from '@components/ImagePicker';
+import Typography from '@components/Typography';
 import {useTheme} from '@react-navigation/native';
 import React, {useRef, useState} from 'react';
 import {View, Text, Alert, Platform} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {BorderlessButton} from 'react-native-gesture-handler';
+import {ThemeContext} from 'src/contexts/themeContext';
+
+import * as RNLocalize from 'react-native-localize';
+import {translate} from 'src/i18nConfig';
+import {LocaleContext} from 'src/contexts/localeProvider';
 
 interface Props {}
 
@@ -57,6 +64,32 @@ const Settings = (props: Props) => {
           }
         }}
       />
+      <Typography variant="body1">
+        {JSON.stringify(RNLocalize.getLocales())}
+      </Typography>
+      <ThemeContext.Consumer>
+        {({theme, setTheme}) => {
+          return (
+            <Button
+              title={translate('hello')}
+              onPress={() => {
+                setTheme(theme === 'dark' ? 'light' : 'dark');
+              }}
+            />
+          );
+        }}
+      </ThemeContext.Consumer>
+
+      <LocaleContext.Consumer>
+        {({locale, setLocale}) => {
+          <Button
+            title={translate('hello')}
+            onPress={() => {
+              setLocale(locale === 'en' ? 'fr' : 'en');
+            }}
+          />;
+        }}
+      </LocaleContext.Consumer>
     </View>
   );
 };
